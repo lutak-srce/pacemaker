@@ -90,7 +90,7 @@ class pacemaker (
   }
 
   exec { 'pcs_cluster_auth':
-    command => "pcs cluster auth -u ${hacluster_user} -p ${hacluster_passwd} ${cluster_members_flat}",
+    command => "/sbin/pcs cluster auth -u ${hacluster_user} -p ${hacluster_passwd} ${cluster_members_flat}",
     creates => '/var/lib/pcsd/pcs_users.conf',
     require => [
       User['hacluster'], 
@@ -99,7 +99,7 @@ class pacemaker (
   }
 
   exec { 'pcs_cluster_setup':
-    command => "pcs cluster setup --name ${cluster_name} ${cluster_members_flat}",
+    command => "/sbin/pcs cluster setup --name ${cluster_name} ${cluster_members_flat}",
     creates => '/var/lib/pcsd/pcs_settings.conf',
     require => Exec['pcs_cluster_auth'],
   }
