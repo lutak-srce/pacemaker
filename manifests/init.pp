@@ -32,7 +32,6 @@ class pacemaker (
   validate_re($ensure, ['present','absent'], 'Valid values are: present, absent')
   validate_string($version)
   validate_string($package_pcs)
-  validate_string($package_psmisc)
   validate_string($package_pacemaker)
   validate_re($hacluster_hash, ['md5','sha-256','sha-512'], 'Valid values are: md5, sha-256, sha-512')
   validate_string($hacluster_salt)
@@ -65,7 +64,6 @@ class pacemaker (
   }
 
   package { 'pcs':       name => $package_pcs }
-  package { 'psmisc':    name => $package_psmisc }
   package { 'pacemaker': name => $package_pacemaker }
 
   # set defaults for file resource in this scope.
