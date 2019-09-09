@@ -8,8 +8,10 @@ class pacemaker (
   $version           = undef,
   $package_pcs       = $::pacemaker::params::package_pcs,
   $package_pacemaker = $::pacemaker::params::package_pacemaker,
-  $service_enable    = true,
   $service_ensure    = 'running',
+  $pcsd_enable       = true,
+  $corosync_enable   = false,
+  $pacemaker_enable  = false,
   $service_pcsd      = $::pacemaker::params::service_pcsd,
   $service_corosync  = $::pacemaker::params::service_corosync,
   $service_pacemaker = $::pacemaker::params::service_pacemaker,
@@ -77,7 +79,7 @@ class pacemaker (
 
   service { 'pcsd':
     ensure  => $service_ensure,
-    enable  => $service_enable,
+    enable  => $pcsd_enable,
     name    => $service_pcsd,
     require => Package['pcs'],
   }
@@ -106,14 +108,14 @@ class pacemaker (
 
   service { 'corosync':
     ensure  => $service_ensure,
-    enable  => $service_enable,
+    enable  => $corosync_enable,
     name    => $service_corosync,
     require => Exec['pcs_cluster_auth'],
   }
 
   service { 'pacemaker':
     ensure  => $service_ensure,
-    enable  => $service_enable,
+    enable  => $pacemaker_enable,
     name    => $service_pacemaker,
     require => Service['corosync'],
   }
