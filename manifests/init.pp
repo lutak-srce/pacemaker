@@ -4,30 +4,32 @@
 # This class manages Corosync/Pacemaker cluster
 #
 class pacemaker (
-  $ensure            = 'present',
-  $version           = undef,
-  $package_pcs       = $::pacemaker::params::package_pcs,
-  $package_pacemaker = $::pacemaker::params::package_pacemaker,
-  $service_ensure    = 'running',
-  $pcsd_enable       = true,
-  $corosync_enable   = false,
-  $pacemaker_enable  = false,
-  $service_pcsd      = $::pacemaker::params::service_pcsd,
-  $service_corosync  = $::pacemaker::params::service_corosync,
-  $service_pacemaker = $::pacemaker::params::service_pacemaker,
-  $hacluster_user    = $::pacemaker::params::hacluster_user,
-  $hacluster_passwd  = 'hacluster',
-  $hacluster_hash    = 'sha-512',
-  $hacluster_salt    = 'PaAxZ0Lc',
-  $cluster_members   = [],
-  $cluster_name      = 'cluname',
-  $cib_source        = 'UNDEF',
-  $file_mode         = '0644',
-  $file_owner        = 'root',
-  $file_group        = 'root',
-  $dependency_class  = 'pacemaker::dependency',
-  $my_class          = undef,
-  $noops             = undef,
+  $ensure                   = 'present',
+  $version                  = undef,
+  $package_pcs              = $::pacemaker::params::package_pcs,
+  $package_pacemaker        = $::pacemaker::params::package_pacemaker,
+  $service_ensure_pcsd      = 'running',
+  $service_ensure_corosync  = undef,
+  $service_ensure_pacemaker = undef,
+  $service_enable_pcsd      = true,
+  $service_enable_corosync  = false,
+  $service_enable_pacemaker = false,
+  $service_name_pcsd        = $::pacemaker::params::service_pcsd,
+  $service_name_corosync    = $::pacemaker::params::service_corosync,
+  $service_name_pacemaker   = $::pacemaker::params::service_pacemaker,
+  $hacluster_user           = $::pacemaker::params::hacluster_user,
+  $hacluster_passwd         = 'hacluster',
+  $hacluster_hash           = 'sha-512',
+  $hacluster_salt           = 'PaAxZ0Lc',
+  $cluster_members          = [],
+  $cluster_name             = 'cluname',
+  $cib_source               = 'UNDEF',
+  $file_mode                = '0644',
+  $file_owner               = 'root',
+  $file_group               = 'root',
+  $dependency_class         = 'pacemaker::dependency',
+  $my_class                 = undef,
+  $noops                    = undef,
 ) inherits pacemaker::params {
 
   ### Input parameters validation
@@ -78,9 +80,9 @@ class pacemaker (
   }
 
   service { 'pcsd':
-    ensure  => $service_ensure,
-    enable  => $pcsd_enable,
-    name    => $service_pcsd,
+    ensure  => $service_ensure_pcsd,
+    enable  => $service_enable_pcsd,
+    name    => $service_name_pcsd,
     require => Package['pcs'],
   }
 
@@ -107,16 +109,16 @@ class pacemaker (
   }
 
   service { 'corosync':
-    ensure  => $service_ensure,
-    enable  => $corosync_enable,
-    name    => $service_corosync,
+    ensure  => $service_ensure_corosync,
+    enable  => $service_enable_corosync,
+    name    => $service_name_corosync,
     require => Exec['pcs_cluster_auth'],
   }
 
   service { 'pacemaker':
-    ensure  => $service_ensure,
-    enable  => $pacemaker_enable,
-    name    => $service_pacemaker,
+    ensure  => $service_ensure_pacemaker,
+    enable  => $service_enable_pacemaker,
+    name    => $service_name_pacemaker,
     require => Service['corosync'],
   }
 
